@@ -14,4 +14,16 @@
         android:layout_height="wrap_content"
         android:indeterminateOnly="true"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/add_token"
+        android:text="add token"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/id_token"
+        android:text="id"/>
+
 </LinearLayout>
