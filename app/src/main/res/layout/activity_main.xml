@@ -17,12 +17,20 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/add_token"
-        android:text="add token"/>
+        android:layout_margin="10dp"
+        android:id="@+id/add_tokens"
+        android:text="add tokens"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:id="@+id/show_token"
+        android:text="show token"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:id="@+id/id_token"
         android:text="id"/>
 
