@@ -1,4 +1,4 @@
-package com.benlsc.mycoroutines
+package com.benlsc.mycoroutines.room
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

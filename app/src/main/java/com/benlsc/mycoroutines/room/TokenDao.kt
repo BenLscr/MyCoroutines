@@ -1,9 +1,10 @@
-package com.benlsc.mycoroutines
+package com.benlsc.mycoroutines.room
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import com.benlsc.mycoroutines.room.Token
 
 @Dao
 interface TokenDao {

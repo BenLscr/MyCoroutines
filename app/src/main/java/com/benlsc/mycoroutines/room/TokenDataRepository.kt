@@ -1,6 +1,8 @@
-package com.benlsc.mycoroutines
+package com.benlsc.mycoroutines.room
 
 import androidx.lifecycle.LiveData
+import com.benlsc.mycoroutines.room.Token
+import com.benlsc.mycoroutines.room.TokenDao
 
 class TokenDataRepository(
     private val tokenDao: TokenDao

@@ -1,4 +1,4 @@
-package com.benlsc.mycoroutines
+package com.benlsc.mycoroutines.room
 
 import android.content.Context
 import androidx.room.Database
