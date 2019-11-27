@@ -25,11 +25,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun addListener() {
-        add_tokens.setOnClickListener {
-            mainViewModel.setTokens(100)
-        }
-        show_token.setOnClickListener {
-            mainViewModel.getToken(42).observe(this, Observer { id_token.text = it })
+        try_database.setOnClickListener {
+            mainViewModel.tryCoroutineWithRoom()
         }
         dl_wikipedia.setOnClickListener {
             mainViewModel.fetchDoc()
@@ -41,6 +38,12 @@ class MainActivity : AppCompatActivity() {
             Log.e("Wikipedia", it.toString())
             val adapter = RSSAdapter()
             adapter.getNewXML(it)
+        })
+        mainViewModel.propertyLiveData.observe(this, Observer {
+            description.text = it.description
+            name.text = it.agent?.name
+            surname.text = it.agent?.surname
+            postalcode.text = it.address?.postalCode.toString()
         })
     }
 

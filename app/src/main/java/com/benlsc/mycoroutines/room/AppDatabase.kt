@@ -4,10 +4,18 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.benlsc.mycoroutines.room.dao.AddressDao
+import com.benlsc.mycoroutines.room.dao.AgentDao
+import com.benlsc.mycoroutines.room.dao.PropertyDao
+import com.benlsc.mycoroutines.room.models.Address
+import com.benlsc.mycoroutines.room.models.Agent
+import com.benlsc.mycoroutines.room.models.Property
 
-@Database(entities = [Token::class], version = 1)
+@Database(entities = [Address::class, Agent::class, Property::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun tokenDao(): TokenDao
+    abstract fun addressDao(): AddressDao
+    abstract fun agentDao(): AgentDao
+    abstract fun propertyDao(): PropertyDao
 
     companion object {
 

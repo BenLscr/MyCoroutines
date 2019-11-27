@@ -1,12 +1,16 @@
 package com.benlsc.mycoroutines
 
 import android.util.Log
-import androidx.lifecycle.*
-import com.benlsc.mycoroutines.room.Token
-import com.benlsc.mycoroutines.room.TokenDataRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.benlsc.mycoroutines.room.models.Address
+import com.benlsc.mycoroutines.room.models.Agent
+import com.benlsc.mycoroutines.room.models.Property
+import com.benlsc.mycoroutines.room.repository.AddressDataRepository
+import com.benlsc.mycoroutines.room.repository.AgentDataRepository
+import com.benlsc.mycoroutines.room.repository.PropertyDataRepository
+import kotlinx.coroutines.*
 import org.w3c.dom.Document
 import java.io.InputStream
 import java.net.HttpURLConnection
@@ -15,37 +19,49 @@ import java.util.concurrent.Executor
 import javax.xml.parsers.DocumentBuilderFactory
 
 class MainViewModel(
-    private val tokenDataSource: TokenDataRepository,
+    private val addressDataSource: AddressDataRepository,
+    private val agentDataSource: AgentDataRepository,
+    private val propertyDataSource: PropertyDataRepository,
     private val executor: Executor
 ): ViewModel() {
 
     /*---------------ROOM----------------*/
 
-    fun getToken(id: Int): LiveData<String> =
-        Transformations.map(tokenDataSource.getToken(id)) {
-            it?.id?.toString() ?: "no token found"
-        }
+    val propertyLiveData = MutableLiveData<Property>()
 
-    fun setTokens(howMany: Int) {
-        executor.execute {
-            var id: Int = 0
-            do {
-                id++
-                val token = Token(id)
-                tokenDataSource.insertToken(token)
-            } while (id != howMany)
+    fun tryCoroutineWithRoom() {
+        val address = Address(postalCode = 76510)
+        val agent = Agent(name = "Albert", surname = "Einstein")
+        viewModelScope.launch(Dispatchers.Default) {
+            val propertyId = insertData(address, agent)
+            val property = retrieveData(propertyId)
+            /**withContext(Dispatchers.Main) {
+                propertyLiveData.value = property
+            }*/
+            viewModelScope.launch(Dispatchers.Main) {
+                propertyLiveData.value = property
+            }
         }
     }
+
+    private suspend fun insertData(address: Address, agent: Agent): Long {
+        val addressId = addressDataSource.insertAddress(address)
+        val agentId = agentDataSource.insertAgent(agent)
+        val property = Property(addressId = addressId, agentId = agentId, description = "Very long description")
+        return propertyDataSource.insertProperty(property)
+    }
+
+    private suspend fun retrieveData(propertyId: Long) = propertyDataSource.getProperty(propertyId.toInt())
+
+    /*---------------RSS----------------*/
+
+    val document = MutableLiveData<Document>()
 
     fun fetchDoc() {
         viewModelScope.launch {
             getRssFromWikipedia()
         }
     }
-
-    /*---------------RSS----------------*/
-
-    val document = MutableLiveData<Document>()
 
     private suspend fun getRssFromWikipedia() {
         withContext(Dispatchers.IO) {

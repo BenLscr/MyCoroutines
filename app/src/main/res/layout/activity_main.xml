@@ -18,21 +18,33 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:id="@+id/add_tokens"
-        android:text="add tokens"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:id="@+id/show_token"
-        android:text="show token"/>
+        android:id="@+id/try_database"
+        android:text="try coroutine with Room"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:id="@+id/id_token"
-        android:text="id"/>
+        android:id="@+id/description"
+        android:text="description"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:id="@+id/name"
+        android:text="name"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:id="@+id/surname"
+        android:text="surname"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:id="@+id/postalcode"
+        android:text="postalcode"/>
 
     <Button
         android:layout_width="wrap_content"
