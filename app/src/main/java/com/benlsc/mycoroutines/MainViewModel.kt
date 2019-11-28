@@ -27,6 +27,10 @@ class MainViewModel(
 
     /*---------------ROOM----------------*/
 
+    /**
+     * COROUTINE VERSION
+     */
+
     val propertyLiveData = MutableLiveData<Property>()
 
     fun tryCoroutineWithRoom() {
@@ -35,11 +39,8 @@ class MainViewModel(
         viewModelScope.launch(Dispatchers.Default) {
             val propertyId = insertData(address, agent)
             val property = retrieveData(propertyId)
-            /**withContext(Dispatchers.Main) {
-                propertyLiveData.value = property
-            }*/
-            viewModelScope.launch(Dispatchers.Main) {
-                propertyLiveData.value = property
+            withContext(Dispatchers.Main) {
+            propertyLiveData.value = property
             }
         }
     }
@@ -52,6 +53,31 @@ class MainViewModel(
     }
 
     private suspend fun retrieveData(propertyId: Long) = propertyDataSource.getProperty(propertyId.toInt())
+
+    /**
+     * CLASSIC VERSION (LiveData & Executor)
+     */
+
+    /*val propertyLiveData = MutableLiveData<Property>()
+
+    fun tryClassicWithRoom() {
+        val address = Address(postalCode = 76510)
+        val agent = Agent(name = "Albert", surname = "Einstein")
+        executor.execute {
+            val propertyId = insertData(address, agent)
+            val property = retrieveData(propertyId)
+            propertyLiveData.postValue(property.value)
+        }
+    }
+
+    private fun insertData(address: Address, agent: Agent): Long {
+        val addressId = addressDataSource.insertAddress(address)
+        val agentId = agentDataSource.insertAgent(agent)
+        val property = Property(addressId = addressId, agentId = agentId, description = "Very long description")
+        return propertyDataSource.insertProperty(property)
+    }
+
+    private fun retrieveData(propertyId: Long) = propertyDataSource.getProperty(propertyId.toInt())*/
 
     /*---------------RSS----------------*/
 

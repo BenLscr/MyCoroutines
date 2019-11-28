@@ -8,6 +8,10 @@ import androidx.lifecycle.ViewModelProviders
 import com.benlsc.mycoroutines.async.XMLAsyncTask
 import com.benlsc.mycoroutines.injection.Injection
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlin.coroutines.coroutineContext
 
 
 class MainActivity : AppCompatActivity() {
@@ -27,6 +31,7 @@ class MainActivity : AppCompatActivity() {
     private fun addListener() {
         try_database.setOnClickListener {
             mainViewModel.tryCoroutineWithRoom()
+            //mainViewModel.tryClassicWithRoom()
         }
         dl_wikipedia.setOnClickListener {
             mainViewModel.fetchDoc()

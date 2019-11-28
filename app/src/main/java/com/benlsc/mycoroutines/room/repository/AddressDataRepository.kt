@@ -6,8 +6,20 @@ import com.benlsc.mycoroutines.room.models.Address
 
 class AddressDataRepository(private val addressDao: AddressDao) {
 
-    fun getAddress(id: Int): LiveData<Address> = addressDao.getAddress(id)
+    /**
+     * COROUTINE VERSION
+     */
+
+    suspend fun getAddress(id: Int): Address = addressDao.getAddress(id)
 
     suspend fun insertAddress(address: Address): Long = addressDao.insertAddress(address)
+
+    /**
+     * CLASSIC VERSION (LiveData & Executor)
+     */
+
+    /*fun getAddress(id: Int): LiveData<Address> = addressDao.getAddress(id)
+
+    fun insertAddress(address: Address): Long = addressDao.insertAddress(address)*/
 
 }

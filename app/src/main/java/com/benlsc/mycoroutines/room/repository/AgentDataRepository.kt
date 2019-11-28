@@ -6,8 +6,20 @@ import com.benlsc.mycoroutines.room.models.Agent
 
 class AgentDataRepository(private val agentDao: AgentDao) {
 
-    fun getAgent(id: Int): LiveData<Agent> = agentDao.getAgent(id)
+    /**
+     * COROUTINE VERSION
+     */
+
+    suspend fun getAgent(id: Int): Agent = agentDao.getAgent(id)
 
     suspend fun insertAgent(agent: Agent): Long = agentDao.insertAgent(agent)
+
+    /**
+     * CLASSIC VERSION (LiveData & Executor)
+     */
+
+    /*fun getAgent(id: Int): LiveData<Agent> = agentDao.getAgent(id)
+
+    fun insertAgent(agent: Agent): Long = agentDao.insertAgent(agent)*/
 
 }
