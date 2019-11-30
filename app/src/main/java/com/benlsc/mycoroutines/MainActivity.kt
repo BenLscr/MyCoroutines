@@ -1,20 +1,24 @@
 package com.benlsc.mycoroutines
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.lifecycleScope
 import com.benlsc.mycoroutines.async.XMLAsyncTask
 import com.benlsc.mycoroutines.injection.Injection
+import com.vansuita.pickimage.bean.PickResult
+import com.vansuita.pickimage.bundle.PickSetup
+import com.vansuita.pickimage.dialog.PickImageDialog
+import com.vansuita.pickimage.listeners.IPickResult
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlin.coroutines.coroutineContext
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), IPickResult {
 
 
     private val mainViewModel : MainViewModel by lazy { ViewModelProviders.of(this, Injection.provideViewModelFactory(applicationContext)).get(MainViewModel::class.java) }
@@ -36,6 +40,16 @@ class MainActivity : AppCompatActivity() {
         dl_wikipedia.setOnClickListener {
             mainViewModel.fetchDoc()
         }
+        take_photo.setOnClickListener {
+            PickImageDialog.build(PickSetup()).show(this)
+        }
+        show_photo_main.setOnClickListener {
+            doCompressionMain(photo)
+        }
+
+        show_photo_coroutine.setOnClickListener {
+            doCompressionCoroutine(photo)
+        }
     }
 
     private fun addObserver() {
@@ -56,6 +70,55 @@ class MainActivity : AppCompatActivity() {
         val adapter = RSSAdapter()
         val asyncTask = XMLAsyncTask(adapter)
         asyncTask.execute()
+    }
+
+    /**
+     * COMPRESSION
+     */
+
+    private var photo: Bitmap? = null
+
+    override fun onPickResult(r: PickResult) {
+        if (r.error == null) {
+            photo = r.bitmap
+        } else {
+        }
+    }
+
+    /**
+     * Main
+     */
+    private fun doCompressionMain(photo: Bitmap?) {
+        if (photo != null) {
+            var newPhoto: Bitmap = photo
+            for (i in 1..1000) {
+                newPhoto = Bitmap.createScaledBitmap(photo, 50, 50, true)
+                newPhoto = Bitmap.createScaledBitmap(photo, 2000, 2000, true)
+            }
+            showNewPhoto(newPhoto)
+        }
+    }
+
+    /**
+     * Coroutine
+     */
+    private fun doCompressionCoroutine(photo: Bitmap?) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            if (photo != null) {
+                var newPhoto: Bitmap = photo
+                for (i in 1..1000) {
+                    newPhoto = Bitmap.createScaledBitmap(photo, 50, 50, true)
+                    newPhoto = Bitmap.createScaledBitmap(photo, 2000, 2000, true)
+                }
+                withContext(Dispatchers.Main) {
+                    showNewPhoto(newPhoto)
+                }
+            }
+        }
+    }
+
+    private fun showNewPhoto(photo: Bitmap) {
+        photo_container.setImageBitmap(photo)
     }
 
 }
