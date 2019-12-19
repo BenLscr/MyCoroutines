@@ -1,5 +1,6 @@
 package com.benlsc.mycoroutines
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
@@ -8,14 +9,18 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import com.benlsc.mycoroutines.async.XMLAsyncTask
+import com.benlsc.mycoroutines.coroutineMerged.CoroutineMergedActivity
 import com.benlsc.mycoroutines.injection.Injection
 import com.vansuita.pickimage.bean.PickResult
 import com.vansuita.pickimage.bundle.PickSetup
 import com.vansuita.pickimage.dialog.PickImageDialog
 import com.vansuita.pickimage.listeners.IPickResult
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.*
-import kotlin.coroutines.coroutineContext
+import kotlinx.android.synthetic.main.toolbar.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class MainActivity : AppCompatActivity(), IPickResult {
@@ -27,10 +32,14 @@ class MainActivity : AppCompatActivity(), IPickResult {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        configureToolbar()
+
         addListener()
 
         addObserver()
     }
+
+    private fun configureToolbar() = setSupportActionBar(toolbar)
 
     private fun addListener() {
         try_database.setOnClickListener {
@@ -46,9 +55,17 @@ class MainActivity : AppCompatActivity(), IPickResult {
         show_photo_main.setOnClickListener {
             doCompressionMain(photo)
         }
-
         show_photo_coroutine.setOnClickListener {
             doCompressionCoroutine(photo)
+        }
+        coroutine_fragment.setOnClickListener {
+            startNewActivity()
+        }
+        test_many_coroutines.setOnClickListener {
+            mainViewModel.testManyCoroutines()
+        }
+        runblocking_coroutines.setOnClickListener {
+            mainViewModel.testRunBlocking()
         }
     }
 
@@ -85,7 +102,7 @@ class MainActivity : AppCompatActivity(), IPickResult {
         }
     }
 
-    /**
+    /*
      * Main
      */
     private fun doCompressionMain(photo: Bitmap?) {
@@ -119,6 +136,14 @@ class MainActivity : AppCompatActivity(), IPickResult {
 
     private fun showNewPhoto(photo: Bitmap) {
         photo_container.setImageBitmap(photo)
+    }
+
+    /**
+     * Activity
+     */
+    private fun startNewActivity() {
+        val intent = Intent(this, CoroutineMergedActivity::class.java)
+        startActivity(intent)
     }
 
 }

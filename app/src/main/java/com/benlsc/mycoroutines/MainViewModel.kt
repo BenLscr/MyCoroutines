@@ -105,4 +105,44 @@ class MainViewModel(
         }
     }
 
+    /*---------------CRASH TEST----------------*/
+
+    /*fun testManyCoroutines() {
+        viewModelScope.launch { myFirstCoroutine() }
+        viewModelScope.launch { mySecondCoroutine() }
+        viewModelScope.launch { myThirdCoroutine() }
+    }*/
+
+    fun testManyCoroutines() {
+        viewModelScope.launch {
+            myFirstCoroutine()
+            mySecondCoroutine()
+            myThirdCoroutine()
+        }
+    }
+
+    private suspend fun myFirstCoroutine() {
+        delay(3000)
+        Log.e("FirstCoroutine,","test")
+    }
+
+    private suspend fun mySecondCoroutine() {
+        Log.e("SecondCoroutine", "test")
+    }
+    private suspend fun myThirdCoroutine() {
+        delay(1000)
+        Log.e("ThirdCoroutine", "test")
+    }
+
+    /**
+     * Runblocking
+     */
+
+    fun testRunBlocking() = runBlocking {
+        delay(5000)
+        Log.e("runBlocking", "test ended")
+    }
+
+
+
 }

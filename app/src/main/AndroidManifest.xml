@@ -19,6 +19,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".coroutineMerged.CoroutineMergedActivity"
+            android:label="Coroutine fragment"
+            android:parentActivityName=".MainActivity"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"
